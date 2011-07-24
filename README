@@ -1,0 +1,8 @@
+edatool
+
+The target I'm working towards is a PCB-editor, to get exercise with C++, Qt,
+and computer graphics programming.
+
+Requires libgeos and Qt. Run qmake, then make, then the executable.
+
+ - Andreas Bertheussen

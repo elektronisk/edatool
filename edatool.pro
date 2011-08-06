@@ -11,5 +11,5 @@ QT += opengl
 LIBS += -lgeos
 
 # Input
-SOURCES += edatool.cpp editorarea.cpp main.cpp index.cpp polygon.cpp track.cpp board.cpp layer.cpp
-HEADERS += edatool.h editorarea.h index.h polygon.h track.h board.h layer.h
+SOURCES += edatool.cpp main.cpp index.cpp polygon.cpp track.cpp board.cpp layer.cpp boardview.cpp
+HEADERS += edatool.h index.h polygon.h track.h board.h layer.h boardview.h

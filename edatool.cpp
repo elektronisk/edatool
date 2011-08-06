@@ -4,19 +4,33 @@
  */
 
 #include <QtGui>
+#include <QGLWidget>
 #include <iostream>
 #include <geos/indexStrtree.h>
 #include "edatool.h"
-
+#include "boardview.h"
 EDATool::EDATool() {
 	this->setWindowTitle(tr("EDATool"));
 
-	QScrollArea *scrollArea = new QScrollArea;
-	EditorArea *area = new EditorArea(scrollArea, this);
-	scrollArea->setWidget(area);
-	scrollArea->setWidgetResizable(true);
+	QGraphicsScene *boardScene = new QGraphicsScene();
+	BoardView *boardView = new BoardView(boardScene);
+	boardScene->setBackgroundBrush(Qt::black);
+	boardView->setViewport(new QGLWidget);
+	
+	qsrand(1);
+	QTime time;
+	time.start();
+	QGraphicsItem *temp;
+	for (int i = 0; i < 100; i++) {
+		QLineF line(qrand() % 500, qrand() % 500, qrand() % 500, qrand() % 500);
+		temp = boardScene->addLine(line, QPen(QBrush(Qt::red), 1, Qt::SolidLine, Qt::RoundCap));
+		temp->setFlag(QGraphicsItem::ItemIsSelectable);
+	}
+	qDebug() << time.elapsed();
+	
 	QTabWidget *tabs = new QTabWidget(this);
-	tabs->addTab(scrollArea, QString("Document"));
+	tabs->addTab(boardView, QString("Document"));
+	
 	this->setCentralWidget(tabs);
 	
 	this->menuBar()->addMenu(tr("File"));

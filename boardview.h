@@ -7,19 +7,22 @@
 #define BOARDVIEW_H
 
 class QWidget;
-#include <QWheelEvent>
+class QWheelEvent;
 class QGraphicsScene;
+class QMainWindow;
+class QKeyEvent;
 #include <QGraphicsView>
 #include <QPointF>
 
 class BoardView : public QGraphicsView {
 public:
-	BoardView(QGraphicsScene *scene, QWidget *parent = 0);
+	BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent = 0);
 private:
+	QGraphicsItem *temporaryItem;
+	QMainWindow *mainWindow;
 	QPoint viewCursorPosition;
 	QPointF sceneCursorPosition;
-	QRect viewCursorRect;
-	QPolygonF sceneCursorRect;
+	
 	float zoomFactor;
 	float zoom;
 	bool started;
@@ -29,6 +32,7 @@ protected:
 	void wheelEvent(QWheelEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
+	void keyPressEvent(QKeyEvent *event);
 };
 
 #endif

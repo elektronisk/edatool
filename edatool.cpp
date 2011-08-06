@@ -13,20 +13,18 @@ EDATool::EDATool() {
 	this->setWindowTitle(tr("EDATool"));
 
 	QGraphicsScene *boardScene = new QGraphicsScene();
-	BoardView *boardView = new BoardView(boardScene);
+	
+	BoardView *boardView = new BoardView(this, boardScene);
 	boardScene->setBackgroundBrush(Qt::black);
 	boardView->setViewport(new QGLWidget);
 	
 	qsrand(1);
-	QTime time;
-	time.start();
 	QGraphicsItem *temp;
-	for (int i = 0; i < 100; i++) {
-		QLineF line(qrand() % 500, qrand() % 500, qrand() % 500, qrand() % 500);
-		temp = boardScene->addLine(line, QPen(QBrush(Qt::red), 1, Qt::SolidLine, Qt::RoundCap));
+	for (int i = 0; i < 20; i++) {
+		QLineF line(qrand() % 200, qrand() % 200, qrand() % 200, qrand() % 200);
+		temp = boardScene->addLine(line, QPen(QBrush(Qt::red), 2, Qt::SolidLine, Qt::RoundCap));
 		temp->setFlag(QGraphicsItem::ItemIsSelectable);
 	}
-	qDebug() << time.elapsed();
 	
 	QTabWidget *tabs = new QTabWidget(this);
 	tabs->addTab(boardView, QString("Document"));

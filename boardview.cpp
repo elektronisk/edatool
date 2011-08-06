@@ -5,14 +5,22 @@
 #include <QTime>
 #include <QDebug>
 #include <QCursor>
+#include <QMainWindow>
+#include <QStatusBar>
+#include <QGraphicsPolygonItem>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
 #include "boardview.h"
 #include "track.h"
 #include <iostream>
 #include <QtCore/qmath.h>
-BoardView::BoardView(QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
+BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
+	mainWindow = main;
 	setTransform(QTransform().translate(0, this->height()).scale(1, -1));
 	zoom = 1;
 	zoomFactor = 0.8;
+	temporaryItem = 0;
 	this->setMouseTracking(true);
 	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 	started = false;
@@ -22,7 +30,7 @@ BoardView::BoardView(QGraphicsScene *scene, QWidget *parent) : QGraphicsView(sce
 }
 
 void BoardView::wheelEvent(QWheelEvent *event) {
-	//QGraphicsView::wheelEvent(event);
+	
 	float dz = (event->delta() / 1200.0);
 	
 	if (dz < 0 && zoom*zoomFactor > 0.1) {
@@ -32,35 +40,54 @@ void BoardView::wheelEvent(QWheelEvent *event) {
 		zoom = zoom*(1/zoomFactor);
 		scale(1/zoomFactor, 1/zoomFactor);	// zoom out
 	}
-	std::cout << "Zoom: " << zoom << std::endl;
-	this->invalidateScene();
-	this->scene()->update();
+	
+	mainWindow->statusBar()->showMessage(QString("%1%").arg(qRound(zoom*100)));
 }
 
 void BoardView::mousePressEvent(QMouseEvent *event){
-	QGraphicsView::mousePressEvent(event);
 	if (event->button() == Qt::LeftButton) {
 		if (!started) {
 			start = mapToScene(event->pos());
+			QLineF line(start, sceneCursorPosition);
+			temporaryItem = scene()->addLine(line, QPen(QBrush(Qt::red), 2, Qt::SolidLine, Qt::RoundCap));
 			started = true;
 		} else {
 			stop = mapToScene(event->pos());
-			Track *track = new Track(start.x(), start.y(), stop.x(), stop.y(), 10);
-			this->scene()->addPolygon(track->shell, QPen(Qt::NoPen), QBrush(Qt::red));
-			delete track;
 			started = false;
+			if (stop == start) {
+				qDebug() << "Zero-length track ignored";
+				scene()->removeItem(temporaryItem);
+			}
+			temporaryItem->setFlag(QGraphicsItem::ItemIsSelectable);
+			
+			return;	// skip selection
 		}
 	} else if (event->button() == Qt::RightButton) {
-		QList<QGraphicsItem*> list = items(event->pos());
-		if (list.size() == 0)
-			return;
-		for (int i = 0; i < list.size(); i++) {
-			this->scene()->removeItem(list.at(i));
-		}
+		if (started)
+			scene()->removeItem(temporaryItem);
+		started = false;
+		return;
 	} else if(event->button() == Qt::MiddleButton) {
 		qDebug() << "There are" << items(event->pos()).size()
 			<< "items at position" << mapToScene(event->pos());
 	}
+	
+	QGraphicsView::mousePressEvent(event);
+}
+
+void BoardView::mouseMoveEvent(QMouseEvent *event) {
+	
+	QGraphicsView::mouseMoveEvent(event);
+	viewCursorPosition = event->pos();
+	sceneCursorPosition = mapToScene(viewCursorPosition);
+	
+	if (temporaryItem && started) {
+		QGraphicsLineItem* li = ((QGraphicsLineItem*)temporaryItem);
+		//li->prepareGeometryChange();
+		li->setLine(QLineF(li->line().p1(), sceneCursorPosition));
+	}
+	
+	this->scene()->update();
 }
 
 void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
@@ -69,17 +96,21 @@ void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
 	float x = sceneCursorPosition.x();
 	float y = sceneCursorPosition.y();
 	painter->setPen(QPen(Qt::white));
-	float d = sceneCursorRect.boundingRect().height();
+	float d =  20 * 1/zoom;
 	
 	painter->drawLine(QPointF(x-d, y), QPointF(x+d, y)); // horizontal line ----
 	painter->drawLine(QPointF(x, y-d), QPointF(x, y+d)); // vert line |
 }
 
-void BoardView::mouseMoveEvent(QMouseEvent *event) {
-	QGraphicsView::mouseMoveEvent(event);
-	viewCursorPosition = event->pos();
-	viewCursorRect = QRect(viewCursorPosition.x() - 20, viewCursorPosition.y() - 20, 40, 40);
-	sceneCursorPosition = mapToScene(viewCursorPosition);
-	sceneCursorRect = mapToScene(viewCursorRect);
-	this->scene()->update();
+void BoardView::keyPressEvent(QKeyEvent *event) {
+	QGraphicsScene *sc = scene();
+	if (event->key() == Qt::Key_Delete) {
+		QList<QGraphicsItem*> selectedItems = sc->selectedItems();
+		if (selectedItems.size() == 0)
+			return;
+		for (int i = 0; i < selectedItems.size(); i++) {
+			sc->removeItem(selectedItems.at(i));
+		}
+		qDebug() << "Deleting " << selectedItems.size();
+	}
 }

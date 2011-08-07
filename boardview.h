@@ -19,6 +19,10 @@ public:
 	BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent = 0);
 private:
 	QGraphicsItem *temporaryItem;
+	bool exitortho;
+	QGraphicsLineItem *tempSegment1;
+	QGraphicsLineItem *tempSegment2;
+	QPointF wayPoint;
 	QMainWindow *mainWindow;
 	QPoint viewCursorPosition;
 	QPointF sceneCursorPosition;
@@ -27,6 +31,7 @@ private:
 	float zoom;
 	bool started;
 	QPointF start, stop;
+	void updateWayPoint();
 protected:
 	void drawForeground (QPainter *painter, const QRectF & rect);
 	void wheelEvent(QWheelEvent *event);

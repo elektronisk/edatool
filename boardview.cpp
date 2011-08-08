@@ -186,10 +186,22 @@ void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
 	float x = sceneCursorPosition.x();
 	float y = sceneCursorPosition.y();
 	painter->setPen(QPen(Qt::white));
-	float d =  20 * 1/zoom;
-	
+	float w = 5 * 1/zoom;
+	float d = 20 * 1/zoom;
+	if (true) {
+		d = qMax(height(), width()) * 1/zoom;
+	}
+	// todo: consolidate several drawLine into drawLines
 	painter->drawLine(QPointF(x-d, y), QPointF(x+d, y)); // horizontal line ----
 	painter->drawLine(QPointF(x, y-d), QPointF(x, y+d)); // vert line |
+	painter->drawRect(QRectF(x-w, y-w, 2*w, 2*w));
+	
+	painter->drawLine(QPointF(-10, 0), QPointF(10, 0));
+	painter->drawLine(QPointF(0, -10), QPointF(0, 10));
+	painter->drawLine(QPointF(10, 0), QPointF(8, -2));
+	painter->drawLine(QPointF(10, 0), QPointF(8, 2));
+	painter->drawLine(QPointF(0, 10), QPointF(-2, 8));
+	painter->drawLine(QPointF(0, 10), QPointF(2, 8));
 }
 
 void BoardView::keyPressEvent(QKeyEvent *event) {

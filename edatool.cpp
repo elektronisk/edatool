@@ -20,18 +20,26 @@ EDATool::EDATool() {
 	
 	qsrand(1);
 	QGraphicsItem *temp;
+	
+	/*
 	for (int i = 0; i < 100; i++) {
 		QLineF line(qrand() % 200, qrand() % 200, qrand() % 200, qrand() % 200);
 		temp = boardScene->addLine(line, QPen(QBrush(Qt::red), 2, Qt::SolidLine, Qt::RoundCap));
 		temp->setFlag(QGraphicsItem::ItemIsSelectable);
 	}
+	*/
+	
 	
 	QGraphicsTextItem *text = new QGraphicsTextItem("My Text\nMultiline");
 	text->setTextInteractionFlags(Qt::TextEditable);
 	text->setDefaultTextColor(Qt::white);
 	text->scale(1, -1);
-	text->setPos(10, 10);
-	boardScene->addItem(text);
+	text->setFont(QFont("ISOCPEUR"));
+	QGraphicsItemGroup *item = new QGraphicsItemGroup();
+	item->addToGroup(text);
+	boardScene->addItem(item);
+	item->setPos(50, 50);
+	
 	
 	QTabWidget *tabs = new QTabWidget(this);
 	tabs->addTab(boardView, QString("Document"));

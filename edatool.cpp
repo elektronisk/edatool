@@ -15,8 +15,8 @@ EDATool::EDATool() {
 	QGraphicsScene *boardScene = new QGraphicsScene();
 	
 	BoardView *boardView = new BoardView(this, boardScene);
-	boardScene->setBackgroundBrush(Qt::black);
-	boardView->setViewport(new QGLWidget);
+	if (!QCoreApplication::arguments().contains("-nogl"))
+		boardView->setViewport(new QGLWidget);
 	
 	qsrand(1);
 	QGraphicsItem *temp;

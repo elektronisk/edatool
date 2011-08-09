@@ -28,6 +28,7 @@ BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) 
 	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 	started = false;
 	setForegroundBrush(QBrush(Qt::white));
+	setBackgroundBrush(Qt::black);
 	setCursor(QCursor(Qt::BlankCursor));
 	setDragMode(QGraphicsView::RubberBandDrag);
 	exitortho = true;
@@ -77,7 +78,7 @@ void BoardView::mousePressEvent(QMouseEvent *event){
 		}
 		started = false;
 		return;
-	} else if(event->button() == Qt::MiddleButton) {
+	} else if(event->button() == Qt::MidButton) {
 		qDebug() << "There are" << items(event->pos()).size()
 			<< "items at position" << mapToScene(event->pos());
 	}

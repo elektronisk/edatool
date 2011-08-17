@@ -7,13 +7,13 @@
 
 namespace PCB {
 	Polygon::Polygon() {
-		//qDebug("Instantiating a polygon");
+		qDebug("Instantiating a polygon");
 		this->geo = 0;
 		this->envelope = 0;
 	}
 
 	Polygon::~Polygon() {
-		//qDebug("Destroying a polygon");
+		qDebug("Destroying a polygon");
 		geos::geom::GeometryFactory factory;
 		this->clean();
 	}

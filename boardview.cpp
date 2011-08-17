@@ -21,14 +21,13 @@ BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) 
 	setTransform(QTransform().translate(0, this->height()).scale(1, -1));
 	zoom = 1;
 	zoomFactor = 0.8;
-	temporaryItem = 0;
 	tempSegment1 = 0;
 	tempSegment2 = 0;
 	this->setMouseTracking(true);
 	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-	started = false;
+	routing = false;
 	setForegroundBrush(QBrush(Qt::white));
-	setBackgroundBrush(Qt::black);
+	setBackgroundBrush(Qt::gray);
 	setCursor(QCursor(Qt::BlankCursor));
 	setDragMode(QGraphicsView::RubberBandDrag);
 	exitortho = true;
@@ -51,32 +50,26 @@ void BoardView::wheelEvent(QWheelEvent *event) {
 
 void BoardView::mousePressEvent(QMouseEvent *event){
 	if (event->button() == Qt::LeftButton) {
-		if (!started) {
-			start = mapToScene(event->pos());
-			QLineF line(start, sceneCursorPosition);
-			//temporaryItem = scene()->addLine(line, QPen(QBrush(Qt::red), 2, Qt::SolidLine, Qt::RoundCap));
-			tempSegment1 = scene()->addLine(line, QPen(QBrush(Qt::red), 2, Qt::SolidLine, Qt::RoundCap));
-			tempSegment2 = scene()->addLine(line, QPen(QBrush(Qt::red), 2, Qt::SolidLine, Qt::RoundCap));
-			started = true;
-		} else {
-			stop = mapToScene(event->pos());
-			started = false;
-			if (stop == start) {
-				qDebug() << "Zero-length track ignored";
-				scene()->removeItem(temporaryItem);
-			}
-			//temporaryItem->setFlag(QGraphicsItem::ItemIsSelectable);
+		if (!routing) {
+			routing = true;
+		}
+		start = mapToScene(event->pos());
+		if (tempSegment1 && tempSegment2) {
 			tempSegment1->setFlag(QGraphicsItem::ItemIsSelectable);
 			tempSegment2->setFlag(QGraphicsItem::ItemIsSelectable);
-			
-			return;	// skip selection
 		}
+		tempSegment1 = new Track(start, sceneCursorPosition, 5);
+		tempSegment2 = new Track(start, sceneCursorPosition, 5);
+			
+		scene()->addItem(tempSegment1);
+		scene()->addItem(tempSegment2);
+		return;
 	} else if (event->button() == Qt::RightButton) {
-		if (started) {
+		if (routing) {
 			scene()->removeItem(tempSegment1);
 			scene()->removeItem(tempSegment2);
 		}
-		started = false;
+		routing = false;
 		return;
 	} else if(event->button() == Qt::MidButton) {
 		qDebug() << "There are" << items(event->pos()).size()
@@ -87,7 +80,7 @@ void BoardView::mousePressEvent(QMouseEvent *event){
 }
 
 void BoardView::updateWayPoint() {
-	if (tempSegment1 && tempSegment2 && started) {
+	if (tempSegment1 && tempSegment2 && routing) {
 		QPointF p1, p2, pRef;
 		p1 = start;
 		p2 = sceneCursorPosition;
@@ -136,47 +129,6 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 	viewCursorPosition = event->pos();
 	sceneCursorPosition = mapToScene(viewCursorPosition);
 
-	if (tempSegment1 && tempSegment2 && started) {
-		QPointF p1, p2, pRef;
-		p1 = start;
-		p2 = sceneCursorPosition;
-		
-		float dx = p2.x() - p1.x();
-		float dy = p2.y() - p1.y();
-		if (dx == 0 || dy == 0 || dx == dy) {
-			return; // special case, only need 1 segment
-		}
-		
-		float b;	// b is base, only vertical or horizontal. a is 45 deg angled line.
-		bool dxbiggest = false;
-		
-		float adx = qAbs(dx);
-		float ady = qAbs(dy);
-		
-		if (adx > ady) {
-			b = adx - ady;
-			dxbiggest = true;
-		} else {
-			b = ady - adx;
-		}
-		
-		pRef = p1;
-		int dxpositive_sign = (dx > 0) ? 1 : -1;	// 1 if dx is positive
-		int dypositive_sign = (dy > 0) ? 1 : -1;	// 1 if dx is positive
-		int exitortho_sign = (exitortho) ? 1 : -1;
-		
-		if (!exitortho)
-			pRef = p2;
-		
-		if (dxbiggest) {
-			wayPoint = QPointF(pRef.x() + dxpositive_sign*exitortho_sign*b, pRef.y());
-		} else {
-			wayPoint = QPointF(pRef.x(), pRef.y() + dypositive_sign*exitortho_sign*b);
-		}
-		
-		tempSegment1->setLine(QLineF(start, wayPoint));
-		tempSegment2->setLine(QLineF(wayPoint, sceneCursorPosition));
-	}
 	updateWayPoint();
 	this->scene()->update();
 }

@@ -13,15 +13,15 @@ class QMainWindow;
 class QKeyEvent;
 #include <QGraphicsView>
 #include <QPointF>
+#include "track.h"
 
 class BoardView : public QGraphicsView {
 public:
 	BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent = 0);
 private:
-	QGraphicsItem *temporaryItem;
 	bool exitortho;
-	QGraphicsLineItem *tempSegment1;
-	QGraphicsLineItem *tempSegment2;
+	Track *tempSegment1;
+	Track *tempSegment2;
 	QPointF wayPoint;
 	QMainWindow *mainWindow;
 	QPoint viewCursorPosition;
@@ -29,7 +29,7 @@ private:
 	
 	float zoomFactor;
 	float zoom;
-	bool started;
+	bool routing;
 	QPointF start, stop;
 	void updateWayPoint();
 protected:

@@ -29,7 +29,6 @@ EDATool::EDATool() {
 	}
 	*/
 	
-	
 	QGraphicsTextItem *text = new QGraphicsTextItem("My Text\nMultiline");
 	text->setTextInteractionFlags(Qt::TextEditable);
 	text->setDefaultTextColor(Qt::white);
@@ -49,8 +48,14 @@ EDATool::EDATool() {
 	this->menuBar()->addMenu(tr("File"));
 	this->menuBar()->addMenu(tr("Edit"));
 	
-	
-	this->statusBar()->showMessage("Welcome");
-	
+	//this->statusBar()->showMessage("Welcome");
+	QLabel *t = new QLabel("LOL FU");
+	t->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+	this->statusBar()->addPermanentWidget(t);
+	t = new QLabel("MOAR TESTING");
+	t->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+	this->statusBar()->addPermanentWidget(t);
+	this->statusBar()->showMessage("showmessage", 2000);
+	resize(700, 500);
 	Board board;
 }

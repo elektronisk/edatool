@@ -6,14 +6,22 @@
 #ifndef TRACK_H
 #define TRACK_H
 
-#include "polygon.h"
+#include <QGraphicsItem>
+#include <QPen>
+#include <QDebug>
 
-class Track : public PCB::Polygon {
+class Track : public QGraphicsLineItem {
 public:
-	Track(double x1, double y1, double x2, double y2, double w);
+	Track(QPointF p1, QPointF p2, qreal w);
+	Track(qreal x1, qreal y1, qreal x2, qreal y2, qreal w);
 	~Track();
-	PCB::Polygon *polygon;
+	void setWidth(qreal w) {
+		width = w;
+		QPen pen(QBrush(QColor::fromRgba(qRgba(255, 0, 0, 128))), w, Qt::SolidLine, Qt::RoundCap);
+		QGraphicsLineItem::setPen(pen);
+	}
 private:
+	qreal width;
 };
 
 

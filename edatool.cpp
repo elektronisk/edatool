@@ -9,6 +9,8 @@
 #include <geos/indexStrtree.h>
 #include "edatool.h"
 #include "boardview.h"
+#include "routetool.h"
+
 EDATool::EDATool() {
 	this->setWindowTitle(tr("EDATool"));
 
@@ -45,8 +47,8 @@ EDATool::EDATool() {
 	
 	this->setCentralWidget(tabs);
 	
-	this->menuBar()->addMenu(tr("File"));
-	this->menuBar()->addMenu(tr("Edit"));
+	this->fileMenu = this->menuBar()->addMenu(tr("File"));
+	this->editMenu = this->menuBar()->addMenu(tr("Edit"));
 	
 	//this->statusBar()->showMessage("Welcome");
 	QLabel *t = new QLabel("LOL FU");
@@ -58,4 +60,7 @@ EDATool::EDATool() {
 	this->statusBar()->showMessage("showmessage", 2000);
 	resize(700, 500);
 	Board board;
+	
+	RouteTool *tool = new RouteTool(this);
+	tool->install();
 }

@@ -14,6 +14,7 @@
 #include <QtCore/qmath.h>
 #include "boardview.h"
 #include "track.h"
+
 #include <iostream>
 #include <QtCore/qmath.h>
 BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
@@ -31,6 +32,7 @@ BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) 
 	setCursor(QCursor(Qt::BlankCursor));
 	setDragMode(QGraphicsView::RubberBandDrag);
 	exitortho = true;
+	
 }
 
 void BoardView::wheelEvent(QWheelEvent *event) {

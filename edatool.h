@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include "polygon.h"
 #include "board.h"
+#include "tool.h"
 
 class EditorArea;
 
@@ -16,9 +17,11 @@ class EDATool : public QMainWindow {
 	Q_OBJECT
 public:
 	EDATool();
+	friend class Tool;
 private slots:
 private:
-	
+	QMenu *fileMenu;
+	QMenu *editMenu;
 };
 
 #endif

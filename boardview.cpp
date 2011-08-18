@@ -63,6 +63,8 @@ void BoardView::mousePressEvent(QMouseEvent *event){
 			
 		scene()->addItem(tempSegment1);
 		scene()->addItem(tempSegment2);
+		exitortho = !exitortho;
+
 		return;
 	} else if (event->button() == Qt::RightButton) {
 		if (routing) {

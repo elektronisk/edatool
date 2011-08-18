@@ -5,15 +5,12 @@
 
 #include "track.h"
 
-Track::Track(QPointF p1, QPointF p2, qreal w) {
+Track::Track(QPointF p1, QPointF p2, qreal w) : QGraphicsLineItem(QLineF(p1, p2)) {
 	setWidth(w);
-	QGraphicsLineItem::QGraphicsLineItem(p1.x(), p1.y(), p2.x(), p2.y());
 }
 
-Track::Track(qreal x1, qreal y1, qreal x2, qreal y2, qreal w) {
+Track::Track(qreal x1, qreal y1, qreal x2, qreal y2, qreal w) : QGraphicsLineItem(x1, y1, x2, y2) {
 	setWidth(w);
-	QGraphicsLineItem::QGraphicsLineItem(x1, y1, x2, y2);
 }
 Track::~Track() {
-	//delete polygon;
 }

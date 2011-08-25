@@ -38,6 +38,7 @@ EDATool::EDATool() {
 	resize(700, 500);
 	//Board board;
 	toolBar = addToolBar("Tools");
+	toolBar->setIconSize(QSize(16, 16));
 	
 	RouteTool *tool = new RouteTool(this);
 	tool->install();

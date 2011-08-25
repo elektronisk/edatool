@@ -1,3 +1,8 @@
+/* 
+ * Copyright (C) 2011 Andreas Bertheussen.
+ * All rigts reserved, although later versions might be open-source licensed.
+ */
+
 #ifndef ROUTETOOL_H
 #define ROUTETOOL_H
 #include "tool.h"

@@ -18,14 +18,14 @@ class QKeyEvent;
 class BoardView : public QGraphicsView {
 public:
 	BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent = 0);
+	QPoint viewCursorPosition;
+	QPointF sceneCursorPosition;
 private:
 	bool exitortho;
 	Track *tempSegment1;
 	Track *tempSegment2;
 	QPointF wayPoint;
 	QMainWindow *mainWindow;
-	QPoint viewCursorPosition;
-	QPointF sceneCursorPosition;
 	
 	float zoomFactor;
 	float zoom;

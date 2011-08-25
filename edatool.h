@@ -10,8 +10,10 @@
 #include "polygon.h"
 #include "board.h"
 #include "tool.h"
+#include "boardview.h"
 
 class EditorArea;
+class QGraphicsScene;
 
 class EDATool : public QMainWindow {
 	Q_OBJECT
@@ -20,6 +22,9 @@ public:
 	friend class Tool;
 private slots:
 private:
+	QToolBar *toolBar;
+	QGraphicsScene *boardScene;
+	BoardView *boardView;
 	QMenu *fileMenu;
 	QMenu *editMenu;
 };

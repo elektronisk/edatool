@@ -30,9 +30,9 @@ BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) 
 	setForegroundBrush(QBrush(Qt::white));
 	setBackgroundBrush(Qt::gray);
 	setCursor(QCursor(Qt::BlankCursor));
-	setDragMode(QGraphicsView::RubberBandDrag);
+	setDragMode(QGraphicsView::ScrollHandDrag);
 	exitortho = true;
-	
+	setSceneRect(-500, -500, 1000, 1000);
 }
 
 void BoardView::wheelEvent(QWheelEvent *event) {
@@ -62,13 +62,14 @@ void BoardView::mousePressEvent(QMouseEvent *event){
 		}
 		tempSegment1 = new Track(start, sceneCursorPosition, 5);
 		tempSegment2 = new Track(start, sceneCursorPosition, 5);
-			
+
 		scene()->addItem(tempSegment1);
 		scene()->addItem(tempSegment2);
 		exitortho = !exitortho;
 
-		return;
+		//return;
 	} else if (event->button() == Qt::RightButton) {
+		
 		if (routing) {
 			scene()->removeItem(tempSegment1);
 			scene()->removeItem(tempSegment2);
@@ -76,10 +77,9 @@ void BoardView::mousePressEvent(QMouseEvent *event){
 		routing = false;
 		return;
 	} else if(event->button() == Qt::MidButton) {
-		qDebug() << "There are" << items(event->pos()).size()
-			<< "items at position" << mapToScene(event->pos());
+		
 	}
-	
+	event->ignore();
 	QGraphicsView::mousePressEvent(event);
 }
 
@@ -134,6 +134,7 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 	sceneCursorPosition = mapToScene(viewCursorPosition);
 
 	updateWayPoint();
+	event->ignore(); // allow event to be handled by hooks installed by tools
 	this->scene()->update();
 }
 

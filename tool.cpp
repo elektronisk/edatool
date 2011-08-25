@@ -4,9 +4,11 @@
 #include "tool.h"
 #include <QDebug>
 #include "edatool.h"
+class BoardView;
 Tool::Tool(EDATool *mainWin) {
 	this->mainWindow = mainWin;
 	this->action = new QAction((QMainWindow*)mainWin);
+	this->active = false;
 }
 
 Tool::~Tool() {
@@ -15,3 +17,6 @@ Tool::~Tool() {
 
 QMenu *Tool::getFileMenu() { return mainWindow->fileMenu;}
 QMenu *Tool::getEditMenu() { return mainWindow->editMenu;}
+BoardView *Tool::getBoardView() { return mainWindow->boardView; }
+QGraphicsScene *Tool::getBoardScene() { return mainWindow->boardScene; }
+QToolBar *Tool::getToolBar() { return mainWindow->toolBar; }

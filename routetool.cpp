@@ -13,6 +13,7 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QToolBar>
+#include <QKeySequence>
 #include "boardview.h"
 #include "edatool.h"
 
@@ -24,12 +25,15 @@ void RouteTool::install() {
 	action->setText("Interactive route");
 	action->setIconVisibleInMenu(true);
 	action->setCheckable(true);
+	action->setShortcut(QKeySequence(tr("P, T")));
 	getFileMenu()->addAction(action);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(trigger(bool)));
 	getToolBar()->addAction(action);
-	this->routing = false;
+	
+	routing = false;
 	tempSegment1 = 0;
 	tempSegment2 = 0;
+	exitortho = false;
 }
 
 void RouteTool::uninstall() {
@@ -57,10 +61,7 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 	if (rawEvent->type() == QEvent::MouseMove) {
 		if (routing && tempSegment1 && tempSegment2)
 			updateWayPoint();
-		return false;
-	}
-	
-	if (rawEvent->type() == QEvent::MouseButtonPress) {
+	} else if (rawEvent->type() == QEvent::MouseButtonPress) {
 		QMouseEvent *event = static_cast<QMouseEvent *>(rawEvent);
 		
 		if (event->button() == Qt::LeftButton) {
@@ -91,13 +92,19 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 			}
 			routing = false;
 		}
+	} else if (rawEvent->type() == QEvent::KeyPress) {
+		QKeyEvent *event = static_cast<QKeyEvent *>(rawEvent);
+		if (event->key() == Qt::Key_Space) {
+			exitortho = !exitortho;
+			updateWayPoint();
+		}
 	}
 	return false; // do not eat the event
 	
 }
 
 void RouteTool::updateWayPoint() {
-	if (tempSegment1 && tempSegment2 && active) {
+	if (tempSegment1 && tempSegment2) {
 		QPointF p1, p2, pRef;
 		p1 = start;
 		p2 = getBoardView()->sceneCursorPosition;
@@ -121,14 +128,13 @@ void RouteTool::updateWayPoint() {
 			b = ady - adx;
 		}
 		
+		exitortho ? pRef = p1 : pRef = p2;
+		
 		int dxpositive_sign = (dx > 0) ? 1 : -1;	// 1 if dx is positive
 		int dypositive_sign = (dy > 0) ? 1 : -1;	// 1 if dx is positive
 		int exitortho_sign = (exitortho) ? 1 : -1;
 		
-		if (!exitortho)
-			pRef = p2;
-		else
-			pRef = p1;
+		
 		
 		if (dxbiggest) {
 			wayPoint = QPointF(pRef.x() + dxpositive_sign*exitortho_sign*b, pRef.y());

@@ -11,12 +11,9 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <QtCore/qmath.h>
 #include "boardview.h"
 #include "track.h"
 
-#include <iostream>
-#include <QtCore/qmath.h>
 BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
 	mainWindow = main;
 	setTransform(QTransform().translate(0, this->height()).scale(1, -1));

@@ -24,6 +24,7 @@ protected:
 public slots:
 	void trigger(bool);
 private:
+	bool routing;
 	void updateWayPoint();
 	QPointF start, stop, wayPoint;
 	Track *tempSegment1;

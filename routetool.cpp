@@ -27,6 +27,9 @@ void RouteTool::install() {
 	getFileMenu()->addAction(action);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(trigger(bool)));
 	getToolBar()->addAction(action);
+	this->routing = false;
+	tempSegment1 = 0;
+	tempSegment2 = 0;
 }
 
 void RouteTool::uninstall() {
@@ -46,19 +49,54 @@ void RouteTool::activate() {
 
 void RouteTool::deactivate() {
 	active = false;
+	action->setChecked(false);
 	getBoardView()->removeEventFilter(this);
 }
 
-bool RouteTool::eventFilter(QObject *obj, QEvent *event) {
-	if (event->type() == QEvent::MouseMove) {
-		QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-		qDebug() << "In mouse event filter for qgraphicsview: " << mouseEvent->pos();
+bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
+	if (rawEvent->type() == QEvent::MouseMove) {
+		if (routing && tempSegment1 && tempSegment2)
+			updateWayPoint();
+		return false;
+	}
+	
+	if (rawEvent->type() == QEvent::MouseButtonPress) {
+		QMouseEvent *event = static_cast<QMouseEvent *>(rawEvent);
+		
+		if (event->button() == Qt::LeftButton) {
+			if (!routing)
+				routing = true;
+			
+			start = getBoardView()->sceneCursorPosition;
+			
+			if (tempSegment1 && tempSegment2) {
+				tempSegment1->setFlag(QGraphicsItem::ItemIsSelectable);
+				tempSegment2->setFlag(QGraphicsItem::ItemIsSelectable);
+			}
+			
+			tempSegment1 = new Track(start, getBoardView()->sceneCursorPosition, 5);
+			tempSegment2 = new Track(start, getBoardView()->sceneCursorPosition, 5);
+			
+			getBoardScene()->addItem(tempSegment1);
+			getBoardScene()->addItem(tempSegment2);
+			
+			exitortho = !exitortho;
+			
+		} else if (event->button() == Qt::RightButton) {
+			if (routing) {
+				getBoardScene()->removeItem(tempSegment1);
+				getBoardScene()->removeItem(tempSegment2);
+			} else {
+				deactivate();
+			}
+			routing = false;
+		}
 	}
 	return false; // do not eat the event
+	
 }
 
 void RouteTool::updateWayPoint() {
-	qDebug() << "in waypoint update";
 	if (tempSegment1 && tempSegment2 && active) {
 		QPointF p1, p2, pRef;
 		p1 = start;
@@ -83,13 +121,14 @@ void RouteTool::updateWayPoint() {
 			b = ady - adx;
 		}
 		
-		pRef = p1;
 		int dxpositive_sign = (dx > 0) ? 1 : -1;	// 1 if dx is positive
 		int dypositive_sign = (dy > 0) ? 1 : -1;	// 1 if dx is positive
 		int exitortho_sign = (exitortho) ? 1 : -1;
 		
 		if (!exitortho)
 			pRef = p2;
+		else
+			pRef = p1;
 		
 		if (dxbiggest) {
 			wayPoint = QPointF(pRef.x() + dxpositive_sign*exitortho_sign*b, pRef.y());

@@ -20,6 +20,7 @@ Tool::~Tool() {
 	delete this->action;
 }
 
+QMenu *Tool::getPlaceMenu() { return mainWindow->placeMenu;}
 QMenu *Tool::getFileMenu() { return mainWindow->fileMenu;}
 QMenu *Tool::getEditMenu() { return mainWindow->editMenu;}
 BoardView *Tool::getBoardView() { return mainWindow->boardView; }

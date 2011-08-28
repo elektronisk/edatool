@@ -21,12 +21,14 @@ EDATool::EDATool() {
 		boardView->setViewport(new QGLWidget);
 	
 	QTabWidget *tabs = new QTabWidget(this);
+	tabs->setFocusPolicy(Qt::NoFocus); // don't let the tab header itself steal focus
 	tabs->addTab(boardView, QString("Document"));
 	tabs->setDocumentMode(true);
 	this->setCentralWidget(tabs);
 	
 	this->fileMenu = this->menuBar()->addMenu(tr("File"));
 	this->editMenu = this->menuBar()->addMenu(tr("Edit"));
+	this->placeMenu = this->menuBar()->addMenu(tr("&Place"));
 	
 	QLabel *t = new QLabel("LOL FU");
 	t->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);

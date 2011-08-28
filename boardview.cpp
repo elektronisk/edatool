@@ -11,10 +11,11 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QMenu>
 #include "boardview.h"
 #include "track.h"
 
-BoardView::BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
+BoardView::BoardView(EDATool *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
 	mainWindow = main;
 	setTransform(QTransform().translate(0, this->height()).scale(1, -1));
 	zoom = 1;
@@ -76,6 +77,7 @@ void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
 
 void BoardView::keyPressEvent(QKeyEvent *event) {
 	QGraphicsScene *sc = scene();
+	
 	if (event->key() == Qt::Key_Delete) {
 		QList<QGraphicsItem*> selectedItems = sc->selectedItems();
 		if (selectedItems.size() == 0)
@@ -83,6 +85,8 @@ void BoardView::keyPressEvent(QKeyEvent *event) {
 		for (int i = 0; i < selectedItems.size(); i++) {
 			sc->removeItem(selectedItems.at(i));
 		}
+	} else if (event->key() == Qt::Key_P) {
+		mainWindow->placeMenu->popup(QCursor::pos());
 	}
 	QGraphicsView::keyPressEvent(event);
 }

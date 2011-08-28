@@ -14,16 +14,17 @@ class QKeyEvent;
 #include <QGraphicsView>
 #include <QPointF>
 #include "track.h"
+#include "edatool.h"
 
 class BoardView : public QGraphicsView {
 public:
-	BoardView(QMainWindow *main, QGraphicsScene *scene, QWidget *parent = 0);
+	BoardView(EDATool *main, QGraphicsScene *scene, QWidget *parent = 0);
 	QPoint viewCursorPosition;
 	QPointF sceneCursorPosition;
 
 private:
+	EDATool *mainWindow;
 	QPointF wayPoint;
-	QMainWindow *mainWindow;
 	
 	float zoomFactor;
 	float zoom;

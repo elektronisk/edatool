@@ -28,6 +28,7 @@ public:
 	
 	QMenu *getFileMenu();
 	QMenu *getEditMenu();
+	QMenu *getPlaceMenu();
 	BoardView *getBoardView();
 	QGraphicsScene *getBoardScene();
 	QToolBar *getToolBar();

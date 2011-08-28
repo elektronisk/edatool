@@ -20,13 +20,13 @@ class EDATool : public QMainWindow {
 public:
 	EDATool();
 	friend class Tool;
+	friend class BoardView;
 private slots:
 private:
 	QToolBar *toolBar;
 	QGraphicsScene *boardScene;
 	BoardView *boardView;
-	QMenu *fileMenu;
-	QMenu *editMenu;
+	QMenu *fileMenu, *editMenu, *placeMenu;
 };
 
 #endif

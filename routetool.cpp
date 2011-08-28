@@ -22,11 +22,11 @@ RouteTool::RouteTool(EDATool *w) : Tool(w) {}
 void RouteTool::install() {
 	qDebug() << "Installing RouteTool";
 	action->setIcon(QIcon::fromTheme("edit-copy")); /* random icon for now */
-	action->setText("Interactive route");
+	action->setText("In&teractive route");
 	action->setIconVisibleInMenu(true);
 	action->setCheckable(true);
-	action->setShortcut(QKeySequence(tr("P, T")));
-	getFileMenu()->addAction(action);
+	//action->setShortcut(QKeySequence(tr("T")));
+	getPlaceMenu()->addAction(action);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(trigger(bool)));
 	getToolBar()->addAction(action);
 	
@@ -42,7 +42,7 @@ void RouteTool::uninstall() {
 		return;
 	}
 	qDebug() << "Uninstalling RouteTool";
-	getFileMenu()->removeAction(action);
+	getPlaceMenu()->removeAction(action);
 	getToolBar()->removeAction(action);
 }
 
@@ -73,6 +73,8 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 			if (tempSegment1 && tempSegment2) {
 				tempSegment1->setFlag(QGraphicsItem::ItemIsSelectable);
 				tempSegment2->setFlag(QGraphicsItem::ItemIsSelectable);
+				tempSegment1->setFlag(QGraphicsItem::ItemIsMovable);
+				tempSegment2->setFlag(QGraphicsItem::ItemIsMovable);
 			}
 			
 			tempSegment1 = new Track(start, getBoardView()->sceneCursorPosition, 5);

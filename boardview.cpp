@@ -47,6 +47,26 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 	QGraphicsView::mouseMoveEvent(event);
 	viewCursorPosition = event->pos();
 	sceneCursorPosition = mapToScene(viewCursorPosition);
+	
+	qreal x = sceneCursorPosition.x();
+	qreal y = sceneCursorPosition.y();
+	qreal s = 1.0;
+	qreal sh = s/2.0;
+	
+	if (x < 0) {
+		x = x-sh - fmod(x-sh,s);
+	} else {
+		x = x+sh - fmod(x+sh,s);
+	}
+	
+	if (y < 0) {
+		y = y-sh - fmod(y-sh,s);
+	} else {
+		y = y+sh - fmod(y+sh,s);
+	}
+	
+	sceneCursorPosition = QPointF(   x  ,  y   );
+	
 	event->ignore(); // allow event to be handled by hooks installed by tools
 	scene()->update();
 }
@@ -65,7 +85,7 @@ void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
 	// todo: consolidate several drawLine into drawLines
 	painter->drawLine(QPointF(x-d, y), QPointF(x+d, y)); // horizontal line ----
 	painter->drawLine(QPointF(x, y-d), QPointF(x, y+d)); // vert line |
-	painter->drawRect(QRectF(x-w, y-w, 2*w, 2*w));
+	painter->drawRect(QRectF(x-w, y-w, 2*w, 2*w));		// centre square
 	
 	painter->drawLine(QPointF(-10, 0), QPointF(10, 0));
 	painter->drawLine(QPointF(0, -10), QPointF(0, 10));

@@ -27,8 +27,9 @@ void RouteTool::install() {
 	action->setCheckable(true);
 	//action->setShortcut(QKeySequence(tr("T")));
 	getPlaceMenu()->addAction(action);
-	connect(action, SIGNAL(triggered(bool)), this, SLOT(trigger(bool)));
+	connect(action, SIGNAL(toggled(bool)), this, SLOT(trigger(bool)));
 	getToolBar()->addAction(action);
+	getToolActionGroup()->addAction(action);
 	
 	routing = false;
 	tempSegment1 = 0;
@@ -44,17 +45,20 @@ void RouteTool::uninstall() {
 	qDebug() << "Uninstalling RouteTool";
 	getPlaceMenu()->removeAction(action);
 	getToolBar()->removeAction(action);
+	getToolActionGroup()->removeAction(action);
 }
 
 void RouteTool::activate() {
 	active = true;
 	getBoardView()->installEventFilter(this);
+	qDebug() << "routetool activated";
 }
 
 void RouteTool::deactivate() {
 	active = false;
 	action->setChecked(false);
 	getBoardView()->removeEventFilter(this);
+	qDebug() << "routetool deactivated";
 }
 
 bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {

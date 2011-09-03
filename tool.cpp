@@ -20,9 +20,12 @@ Tool::~Tool() {
 	delete this->action;
 }
 
+bool Tool::isActive() { return active; }
+
 QMenu *Tool::getPlaceMenu() { return mainWindow->placeMenu;}
 QMenu *Tool::getFileMenu() { return mainWindow->fileMenu;}
 QMenu *Tool::getEditMenu() { return mainWindow->editMenu;}
 BoardView *Tool::getBoardView() { return mainWindow->boardView; }
 QGraphicsScene *Tool::getBoardScene() { return mainWindow->boardScene; }
 QToolBar *Tool::getToolBar() { return mainWindow->toolBar; }
+QActionGroup *Tool::getToolActionGroup() { return mainWindow->toolActionGroup; }

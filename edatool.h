@@ -21,8 +21,10 @@ public:
 	EDATool();
 	friend class Tool;
 	friend class BoardView;
+
 private slots:
 private:
+	QActionGroup *toolActionGroup;
 	QToolBar *toolBar;
 	QGraphicsScene *boardScene;
 	BoardView *boardView;

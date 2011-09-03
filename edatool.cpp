@@ -10,6 +10,7 @@
 #include "edatool.h"
 
 #include "routetool.h"
+#include "selecttool.h"
 
 EDATool::EDATool() {
 	this->setWindowTitle(tr("EDATool"));
@@ -42,7 +43,11 @@ EDATool::EDATool() {
 	toolBar = addToolBar("Tools");
 	toolBar->setIconSize(QSize(16, 16));
 	
+	toolActionGroup = new QActionGroup(this);
+	
+	SelectTool *selTool = new SelectTool(this);
+	selTool->install();
 	RouteTool *tool = new RouteTool(this);
 	tool->install();
-	
 }
+

@@ -15,6 +15,7 @@ class QGraphicsView;
 class BoardView;
 class QGraphicsScene;
 class QToolBar;
+class QActionGroup;
 
 class Tool : public QObject {
 	Q_OBJECT
@@ -31,7 +32,9 @@ public:
 	QMenu *getPlaceMenu();
 	BoardView *getBoardView();
 	QGraphicsScene *getBoardScene();
+	QActionGroup *getToolActionGroup();
 	QToolBar *getToolBar();
+	bool isActive();
 protected:
 	bool active;
 	EDATool *mainWindow;

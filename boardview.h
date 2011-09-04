@@ -28,6 +28,7 @@ private:
 	
 	float zoomFactor;
 	float zoom;
+	QList<QPointF> snapPoints;
 protected:
 	void drawForeground (QPainter *painter, const QRectF & rect);
 	void wheelEvent(QWheelEvent *event);

@@ -20,6 +20,15 @@ public:
 		QPen pen(QBrush(QColor::fromRgba(qRgba(255, 0, 0, 128))), w, Qt::SolidLine, Qt::RoundCap);
 		QGraphicsLineItem::setPen(pen);
 	}
+	enum { Type = UserType + 1 };
+	int type() const {
+		return Type;
+	}
+	QList<QPointF> snapPoints;
+	void setLine(const QLineF & line);
+	void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
+protected:
+	QVariant itemChange(GraphicsItemChange, QVariant &);
 private:
 	qreal width;
 };

@@ -62,6 +62,7 @@ void RouteTool::deactivate() {
 }
 
 bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
+	Q_UNUSED(obj);
 	if (rawEvent->type() == QEvent::MouseMove) {
 		if (routing && tempSegment1 && tempSegment2)
 			updateWayPoint();
@@ -93,8 +94,6 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 			if (routing) {
 				getBoardScene()->removeItem(tempSegment1);
 				getBoardScene()->removeItem(tempSegment2);
-			} else {
-				deactivate();
 			}
 			routing = false;
 		}

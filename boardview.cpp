@@ -7,11 +7,13 @@
 #include <QCursor>
 #include <QMainWindow>
 #include <QStatusBar>
-#include <QGraphicsPolygonItem>
+#include <QGraphicsItem>
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QPointF>
+#include <QLineF>
 #include "boardview.h"
 #include "track.h"
 
@@ -48,7 +50,7 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 	viewCursorPosition = event->pos();
 	sceneCursorPosition = mapToScene(viewCursorPosition);
 	
-	qreal x = sceneCursorPosition.x();
+	/*qreal x = sceneCursorPosition.x();
 	qreal y = sceneCursorPosition.y();
 	qreal s = 1.0;
 	qreal sh = s/2.0;
@@ -65,7 +67,33 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 		y = y+sh - fmod(y+sh,s);
 	}
 	
-	sceneCursorPosition = QPointF(   x  ,  y   );
+	sceneCursorPosition = QPointF(x, y);
+	*/
+	this->snapPoints.clear();
+	QList<QGraphicsItem *> nearby = items(viewCursorPosition.x()-10, viewCursorPosition.y()-10, 20, 20, Qt::IntersectsItemBoundingRect);
+	for (int i = 0; i < nearby.size(); i++) {
+		if (nearby.at(i)->type() > QGraphicsItem::UserType) {
+			Track *track = qgraphicsitem_cast<Track*>(nearby.value(i));
+			if (track) {
+				this->snapPoints.append(track->snapPoints);
+			}
+		}
+	}
+	QPointF closest;
+	if (snapPoints.size() > 0) {
+		closest = snapPoints.at(0);
+		for (int i = 1; i < snapPoints.size();  i++) {
+			if (QLineF(snapPoints.at(i), sceneCursorPosition).length() < QLineF(closest, sceneCursorPosition).length()) {
+				closest = snapPoints.at(i);
+			}			
+		}
+		
+		if (QLineF(closest, sceneCursorPosition).length() < 10) {
+			sceneCursorPosition = closest;
+		}
+	}
+	
+	
 	
 	event->ignore(); // allow event to be handled by hooks installed by tools
 	scene()->update();
@@ -93,6 +121,10 @@ void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
 	painter->drawLine(QPointF(10, 0), QPointF(8, 2));
 	painter->drawLine(QPointF(0, 10), QPointF(-2, 8));
 	painter->drawLine(QPointF(0, 10), QPointF(2, 8));
+	
+	for (int i  = 0; i < snapPoints.size(); i++) {
+		painter->drawPoint(snapPoints.at(i));
+	}
 }
 
 void BoardView::keyPressEvent(QKeyEvent *event) {

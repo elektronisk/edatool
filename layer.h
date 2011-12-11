@@ -7,9 +7,6 @@
 #define LAYER_H
 
 #include <string>
-#include <geos/indexQuadtree.h>
-
-using namespace geos::index;
 
 class Layer {
 public:
@@ -22,8 +19,7 @@ public:
 	std::string name;
 	enum Type type;
 	enum Side side;
-	bool visible;
-	quadtree::Quadtree * itemTree;
+        bool visible;
 };
 
 #endif

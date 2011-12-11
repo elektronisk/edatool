@@ -3,8 +3,8 @@
  * All rigts reserved, although later versions might be open-source licensed.
  */
 
+#include <iostream>
 #include "board.h"
-#include "index.h"
 
 Board::Board() {
 	//initialize layers

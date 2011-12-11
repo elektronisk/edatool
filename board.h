@@ -6,12 +6,9 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <geos/indexQuadtree.h>
 #include <vector>
 #include <string>
 #include "layer.h"
-
-using namespace geos::index;
 
 class Board {
 public:

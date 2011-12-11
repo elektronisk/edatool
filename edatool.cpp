@@ -6,7 +6,6 @@
 #include <QtGui>
 #include <QGLWidget>
 #include <iostream>
-#include <geos/indexStrtree.h>
 #include "edatool.h"
 
 #include "routetool.h"

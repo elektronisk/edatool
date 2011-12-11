@@ -8,7 +8,7 @@ DEPENDPATH += .
 INCLUDEPATH += .
 QT += opengl
 
-LIBS += -lgeos
+LIBS +=
 
 # Input
 SOURCES += main.cpp edatool.cpp index.cpp polygon.cpp track.cpp board.cpp layer.cpp boardview.cpp tool.cpp routetool.cpp selecttool.cpp

@@ -7,7 +7,6 @@
 #define EDATOOL_H
 
 #include <QMainWindow>
-#include "polygon.h"
 #include "board.h"
 #include "tool.h"
 #include "boardview.h"

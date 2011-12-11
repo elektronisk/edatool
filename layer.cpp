@@ -7,13 +7,12 @@
 
 Layer::Layer() {
 	this->visible = true;
-	this->name = "Unnamed layer";
-	this->itemTree = new quadtree::Quadtree();
+        this->name = "Unnamed layer";
 	this->side = Layer::Top;
 	this->type = Layer::Conductor;
 }
 Layer::~Layer() {
-	delete this->itemTree;
+
 }
 
 std::string Layer::typeToString(Layer::Type _type) {

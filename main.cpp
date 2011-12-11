@@ -5,5 +5,5 @@ int main(int argc, char **argv) {
 	QApplication app(argc, argv);
 	EDATool edatool;
 	edatool.show();
-	app.exec();
+        return app.exec();
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011 Andreas Bertheussen.
  * All rigts reserved, although later versions might be open-source licensed.
  */
@@ -25,6 +25,7 @@ public:
 		return Type;
 	}
 	QList<QPointF> snapPoints;
+	bool hasSnap;
 	void setLine(const QLineF & line);
 	void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
 protected:

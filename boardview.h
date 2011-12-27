@@ -28,6 +28,7 @@ private:
 	
 	float zoomFactor;
 	float zoom;
+	bool snapped;
 	QList<QPointF> snapPoints;
 protected:
 	void drawForeground (QPainter *painter, const QRectF & rect);

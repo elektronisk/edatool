@@ -76,15 +76,19 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 			start = getBoardView()->sceneCursorPosition;
 			
 			if (tempSegment1 && tempSegment2) {
-				tempSegment1->setFlag(QGraphicsItem::ItemIsSelectable);
-				tempSegment2->setFlag(QGraphicsItem::ItemIsSelectable);
-				tempSegment1->setFlag(QGraphicsItem::ItemIsMovable);
-				tempSegment2->setFlag(QGraphicsItem::ItemIsMovable);
+				//tempSegment1->setFlag(QGraphicsItem::ItemIsSelectable);
+				//tempSegment2->setFlag(QGraphicsItem::ItemIsSelectable);
+				//tempSegment1->setFlag(QGraphicsItem::ItemIsMovable);
+				//tempSegment2->setFlag(QGraphicsItem::ItemIsMovable);
+				tempSegment1->hasSnap = true;	/* turn on snapping once placed. */
+				tempSegment2->hasSnap = true;
 			}
-			
-			tempSegment1 = new Track(start, getBoardView()->sceneCursorPosition, 5);
-			tempSegment2 = new Track(start, getBoardView()->sceneCursorPosition, 5);
-			
+
+			tempSegment1 = new Track(start, getBoardView()->sceneCursorPosition, 0.200);
+			tempSegment2 = new Track(start, getBoardView()->sceneCursorPosition, 0.200);
+			tempSegment1->hasSnap = false;
+			tempSegment2->hasSnap = false;
+
 			getBoardScene()->addItem(tempSegment1);
 			getBoardScene()->addItem(tempSegment2);
 			

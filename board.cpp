@@ -50,16 +50,16 @@ void Board::addLayer(Layer::Side _side, Layer::Type _type, std::string _name, in
 		}
 		// layer is not internal conductor, but is pastemask, soldermask, silkscreen etc. Must be unique for each side.
 		if (_side == Layer::Top) { // TOP LAYER CHECK
-			for (int i = 0; i < this->topStack.size(); i++) {
+			for (unsigned int i = 0; i < this->topStack.size(); i++) {
 				if (this->topStack[i]->type == _type) {
 					std::cout << "Removing top stack item " << i << std::endl;
 					delete this->topStack[i];
-					topStack.erase(topStack.begin() + i); 
+					topStack.erase(topStack.begin() + i);
 					break;
 				}
 			}
 		} else { // BOTTOM LAYER CHECK
-			for (int i = 0; i < this->bottomStack.size(); i++) {
+			for (unsigned int i = 0; i < this->bottomStack.size(); i++) {
 				if (this->bottomStack[i]->type == _type) {
 					std::cout << "Removing top stack item " << i << std::endl;
 					delete this->bottomStack[i];

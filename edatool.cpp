@@ -25,6 +25,12 @@ EDATool::EDATool() {
 	tabs->addTab(boardView, QString("Document"));
 	tabs->setDocumentMode(true);
 	this->setCentralWidget(tabs);
+	QDockWidget *temp = new QDockWidget(this);
+	QLabel *label = new QLabel(temp);
+	temp->setWindowTitle("Tool settings");
+	temp->setWidget(label);
+	label->setText("Lols");
+	this->addDockWidget(Qt::LeftDockWidgetArea, temp);
 	
 	this->fileMenu = this->menuBar()->addMenu(tr("File"));
 	this->editMenu = this->menuBar()->addMenu(tr("Edit"));

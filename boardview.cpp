@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011 Andreas Bertheussen.
  * All rigts reserved, although later versions might be open-source licensed.
  */
@@ -53,51 +53,35 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 	QGraphicsView::mouseMoveEvent(event);
 	viewCursorPosition = event->pos();
 	sceneCursorPosition = mapToScene(viewCursorPosition); // may be modified later in this func because of snap
-
-	/*qreal x = sceneCursorPosition.x();
-	qreal y = sceneCursorPosition.y();
-	qreal s = 1.0;
-	qreal sh = s/2.0;
-	
-	if (x < 0) {
-		x = x-sh - fmod(x-sh,s);
-	} else {
-		x = x+sh - fmod(x+sh,s);
-	}
-	
-	if (y < 0) {
-		y = y-sh - fmod(y-sh,s);
-	} else {
-		y = y+sh - fmod(y+sh,s);
-	}
-	
-	sceneCursorPosition = QPointF(x, y);
-	*/
-	this->snapPoints.clear();
-	this->snapPoints.append(QPointF(0,0));
-	QList<QGraphicsItem *> nearby = items(viewCursorPosition.x()-10, viewCursorPosition.y()-10, 20, 20, Qt::IntersectsItemBoundingRect);
-	for (int i = 0; i < nearby.size(); i++) {
-		if (nearby.at(i)->type() > QGraphicsItem::UserType) {
-			Track *track = qgraphicsitem_cast<Track*>(nearby.value(i)); // TODO: check for specific graphicsitem type before casting
-			if (track && track->hasSnap) {
-				this->snapPoints.append(track->snapPoints);
+	if (!controlKeyPressed) {
+		this->snapPoints.clear();
+		this->snapPoints.append(QPointF(0,0));
+		QList<QGraphicsItem *> nearby = items(viewCursorPosition.x()-10, viewCursorPosition.y()-10, 20, 20, Qt::IntersectsItemBoundingRect);
+		for (int i = 0; i < nearby.size(); i++) {
+			if (nearby.at(i)->type() > QGraphicsItem::UserType) {
+				Track *track = qgraphicsitem_cast<Track*>(nearby.value(i)); // TODO: check for specific graphicsitem type before casting
+				if (track && track->hasSnap) {
+					this->snapPoints.append(track->snapPoints);
+				}
 			}
 		}
-	}
-	QPointF closest;
-	snapped = false;
-	if (snapPoints.size() > 0) {
-		closest = snapPoints.at(0);
-		for (int i = 1; i < snapPoints.size();  i++) {
-			if (QLineF(snapPoints.at(i), sceneCursorPosition).length() < QLineF(closest, sceneCursorPosition).length()) {
-				closest = snapPoints.at(i);
-			}			
+		QPointF closest;
+		snapped = false;
+		if (snapPoints.size() > 0) {
+			closest = snapPoints.at(0);
+			for (int i = 1; i < snapPoints.size();  i++) {
+				if (QLineF(snapPoints.at(i), sceneCursorPosition).length() < QLineF(closest, sceneCursorPosition).length()) {
+					closest = snapPoints.at(i);
+				}
+			}
+
+			if (QLineF(closest, sceneCursorPosition).length() < 0.1) {
+				sceneCursorPosition = closest;
+				snapped = true;
+			}
 		}
-		
-		if (QLineF(closest, sceneCursorPosition).length() < 0.1) {
-			sceneCursorPosition = closest;
-			snapped = true;
-		}
+	} else {
+		snapped = false;
 	}
 	mainWindow->statusBar()->showMessage(QString("%1% x:%2 y:%3").arg(qRound(zoom)).arg(sceneCursorPosition.x()).arg(sceneCursorPosition.y()));
 	event->ignore(); // allow event to be handled by hooks installed by tools
@@ -135,10 +119,17 @@ void BoardView::drawForeground (QPainter *painter, const QRectF & rect) {
 	}
 }
 
+void BoardView::keyReleaseEvent(QKeyEvent *event) {
+	if (event->key() == Qt::Key_Control) {
+		controlKeyPressed = false;
+	}
+}
+
 void BoardView::keyPressEvent(QKeyEvent *event) {
 	QGraphicsScene *sc = scene();
-	
-	if (event->key() == Qt::Key_Delete) {
+	if (event->key() == Qt::Key_Control) {
+		controlKeyPressed = true;
+	} else if (event->key() == Qt::Key_Delete) {
 		QList<QGraphicsItem*> selectedItems = sc->selectedItems();
 		if (selectedItems.size() == 0)
 			return;

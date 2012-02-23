@@ -25,7 +25,9 @@ public:
 private:
 	EDATool *mainWindow;
 	QPointF wayPoint;
-	
+	bool controlKeyPressed;
+	bool shiftKeyPressed;
+	bool altKeyPressed;
 	float zoomFactor;
 	float zoom;
 	bool snapped;
@@ -35,6 +37,7 @@ protected:
 	void wheelEvent(QWheelEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 };
 
 #endif

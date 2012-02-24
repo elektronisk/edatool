@@ -59,7 +59,7 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 		QList<QGraphicsItem *> nearby = items(viewCursorPosition.x()-10, viewCursorPosition.y()-10, 20, 20, Qt::IntersectsItemBoundingRect);
 		for (int i = 0; i < nearby.size(); i++) {
 			if (nearby.at(i)->type() > QGraphicsItem::UserType) {
-				Track *track = qgraphicsitem_cast<Track*>(nearby.value(i)); // TODO: check for specific graphicsitem type before casting
+				Wire *track = qgraphicsitem_cast<Wire*>(nearby.value(i)); // TODO: check for specific graphicsitem type before casting
 				if (track && track->hasSnap) {
 					this->snapPoints.append(track->snapPoints);
 				}

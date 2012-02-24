@@ -27,8 +27,8 @@ private:
 	bool routing;
 	void updateWayPoint();
 	QPointF start, stop, wayPoint;
-	Track *tempSegment1;
-	Track *tempSegment2;
+	Wire *tempSegment1;
+	Wire *tempSegment2;
 	bool exitortho;
 };
 

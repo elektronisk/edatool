@@ -10,11 +10,11 @@
 #include <QPen>
 #include <QDebug>
 
-class Track : public QGraphicsLineItem {
+class Wire : public QGraphicsLineItem {
 public:
-	Track(QPointF p1, QPointF p2, qreal w);
-	Track(qreal x1, qreal y1, qreal x2, qreal y2, qreal w);
-	~Track();
+	Wire(QPointF p1, QPointF p2, qreal w);
+	Wire(qreal x1, qreal y1, qreal x2, qreal y2, qreal w);
+	~Wire();
 	void setWidth(qreal w) {
 		width = w;
 		QPen pen(QBrush(QColor::fromRgba(qRgba(255, 0, 0, 128))), w, Qt::SolidLine, Qt::RoundCap);

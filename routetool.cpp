@@ -84,8 +84,8 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 				tempSegment2->hasSnap = true;
 			}
 
-			tempSegment1 = new Track(start, getBoardView()->sceneCursorPosition, 0.200);
-			tempSegment2 = new Track(start, getBoardView()->sceneCursorPosition, 0.200);
+			tempSegment1 = new Wire(start, getBoardView()->sceneCursorPosition, 0.200);
+			tempSegment2 = new Wire(start, getBoardView()->sceneCursorPosition, 0.200);
 			tempSegment1->hasSnap = false;
 			tempSegment2->hasSnap = false;
 

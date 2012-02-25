@@ -7,7 +7,7 @@
 #include <QGLWidget>
 #include <iostream>
 #include "edatool.h"
-
+#include "eagleformat.h"
 #include "routetool.h"
 #include "selecttool.h"
 
@@ -56,5 +56,10 @@ EDATool::EDATool() {
 	selTool->install();
 	RouteTool *tool = new RouteTool(this);
 	tool->install();
+
+	QFile file("C:\\Users\\andreas\\workspace\\edatool\\test.brd");
+	EagleFormat *eagleFormat = new EagleFormat();
+	eagleFormat->read(&file, boardScene);
+
 }
 

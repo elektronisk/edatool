@@ -6,7 +6,7 @@
 #ifndef ROUTETOOL_H
 #define ROUTETOOL_H
 #include "tool.h"
-#include "track.h"
+#include "wire.h"
 class QMainWindow;
 class QMouseEvent;
 class QKeyEvent;

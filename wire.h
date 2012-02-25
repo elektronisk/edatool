@@ -10,27 +10,25 @@
 #include <QPen>
 #include <QDebug>
 
-class Wire : public QGraphicsLineItem {
+#include "pcbgraphicsitem.h"
+
+class Wire : public PCBGraphicsItem {
 public:
 	Wire(QPointF p1, QPointF p2, qreal w);
 	Wire(qreal x1, qreal y1, qreal x2, qreal y2, qreal w);
-	~Wire();
-	void setWidth(qreal w) {
-		width = w;
-		QPen pen(QBrush(QColor::fromRgba(qRgba(255, 0, 0, 128))), w, Qt::SolidLine, Qt::RoundCap);
-		QGraphicsLineItem::setPen(pen);
-	}
+	QRectF boundingRect() const;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+
 	enum { Type = UserType + 1 };
 	int type() const {
 		return Type;
 	}
-	QList<QPointF> snapPoints;
-	bool hasSnap;
 	void setLine(const QLineF & line);
 	void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
-protected:
-	QVariant itemChange(GraphicsItemChange, QVariant &);
+
 private:
+	void updateSnapPoints();
+	QPointF p1, p2;
 	qreal width;
 };
 

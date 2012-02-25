@@ -13,7 +13,7 @@ class QMainWindow;
 class QKeyEvent;
 #include <QGraphicsView>
 #include <QPointF>
-#include "track.h"
+#include "wire.h"
 #include "edatool.h"
 
 class BoardView : public QGraphicsView {

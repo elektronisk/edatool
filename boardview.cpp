@@ -16,7 +16,8 @@
 #include <QPointF>
 #include <QLineF>
 #include "boardview.h"
-#include "track.h"
+#include "wire.h"
+#include "smd.h"
 
 BoardView::BoardView(EDATool *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
 	mainWindow = main;
@@ -30,7 +31,9 @@ BoardView::BoardView(EDATool *main, QGraphicsScene *scene, QWidget *parent) : QG
 	setBackgroundBrush(Qt::gray);
 	setCursor(QCursor(Qt::BlankCursor));
 	setSceneRect(-50, -50, 100, 100);
-	ensureVisible(-10,-10,10,10,10,10);
+
+	//fitInView(-10, -10, 20, 20, Qt::KeepAspectRatioByExpanding);
+	this->scene()->addRect(-10, -10, 20, 20);
 	snapped = false;
 }
 
@@ -58,11 +61,10 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
 		this->snapPoints.append(QPointF(0,0));
 		QList<QGraphicsItem *> nearby = items(viewCursorPosition.x()-10, viewCursorPosition.y()-10, 20, 20, Qt::IntersectsItemBoundingRect);
 		for (int i = 0; i < nearby.size(); i++) {
-			if (nearby.at(i)->type() > QGraphicsItem::UserType) {
-				Wire *track = qgraphicsitem_cast<Wire*>(nearby.value(i)); // TODO: check for specific graphicsitem type before casting
-				if (track && track->hasSnap) {
-					this->snapPoints.append(track->snapPoints);
-				}
+			if (nearby.at(i)->type() >= QGraphicsItem::UserType +1) {
+				PCBGraphicsItem *item = qgraphicsitem_cast<PCBGraphicsItem*>(nearby.value(i)); // TODO: check for specific graphicsitem type before casting
+				if (!item->snapIgnore)
+					this->snapPoints.append(item->snapPoints);
 			}
 		}
 		QPointF closest;

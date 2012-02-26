@@ -1,17 +1,11 @@
 #ifndef SMD_H
 #define SMD_H
 
-#include <QGraphicsRectItem>
-#include <QBrush>
-#include <QPen>
-#include <QDebug>
-
 #include "pcbgraphicsitem.h"
 
-class Smd : public PCBGraphicsItem
-{
+class EagleSmd : public PCBGraphicsItem {
 public:
-	Smd(qreal, qreal, qreal, qreal);
+	EagleSmd(qreal, qreal, qreal, qreal, int, int, QString, bool, bool, bool);
 	QRectF boundingRect() const;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 	enum { Type = UserType + 2 };
@@ -20,6 +14,9 @@ public:
 	}
 private:
 	qreal x, y, dx, dy;
+	int layer, roundness;
+	QString rot;
+	bool stop, thermals, cream;
 };
 
 #endif // SMD_H

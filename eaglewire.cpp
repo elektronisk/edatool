@@ -4,29 +4,33 @@
  */
 
 #include <QPainter>
-#include "wire.h"
+#include <QColor>
+#include "edatool.h"
+#include "eaglewire.h"
 
-Wire::Wire(QPointF _p1, QPointF _p2, qreal _w) {
+EagleWire::EagleWire(QPointF _p1, QPointF _p2, qreal _w, int _layer) {
 	p1 = _p1;
 	p2 = _p2;
 	updateSnapPoints();
 	width = _w;
+	layer = _layer;
 }
 
-Wire::Wire(qreal x1, qreal y1, qreal x2, qreal y2, qreal _w) {
+EagleWire::EagleWire(qreal x1, qreal y1, qreal x2, qreal y2, qreal _w, int _layer) {
 	p1 = QPointF(x1,y1);
 	p2 = QPointF(x2,y2);
 	updateSnapPoints();
 	width = _w;
+	layer = _layer;
 }
 
-void Wire::updateSnapPoints() {
+void EagleWire::updateSnapPoints() {
 	snapPoints.clear();
 	snapPoints.append(p1);
 	snapPoints.append(p2);
 }
 
-QRectF Wire::boundingRect() const {
+QRectF EagleWire::boundingRect() const {
 	const qreal x1 = p1.x();
 	const qreal x2 = p2.x();
 	const qreal y1 = p1.y();
@@ -38,21 +42,25 @@ QRectF Wire::boundingRect() const {
 	qreal by = qMax(y1, y2)+halfwidth;
 	return QRectF(lx, ty, rx - lx, by - ty);
 }
-void Wire::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWidget *widget){
+
+
+
+void EagleWire::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWidget *widget){
 	//p->drawRect(boundingRect());
-	p->setPen(QPen(QBrush(QColor::fromRgba(qRgba(255, 0, 0, 128))), width, Qt::SolidLine, Qt::RoundCap));
+
+	p->setPen(QPen(EDATool::layerToColor(layer), width, Qt::SolidLine, Qt::RoundCap));
 	p->drawLine(p1, p2);
 
 }
 
-void Wire::setLine(const QLineF & line) {
+void EagleWire::setLine(const QLineF & line) {
 	prepareGeometryChange();
 	p1 = line.p1();
 	p2 = line.p2();
 	updateSnapPoints();
 }
 
-void Wire::setLine(qreal x1, qreal y1, qreal x2, qreal y2) {
+void EagleWire::setLine(qreal x1, qreal y1, qreal x2, qreal y2) {
 	prepareGeometryChange();
 	p1 = QPointF(x1,y1);
 	p2 = QPointF(x2,y2);

@@ -16,8 +16,6 @@
 #include <QPointF>
 #include <QLineF>
 #include "boardview.h"
-#include "wire.h"
-#include "smd.h"
 
 BoardView::BoardView(EDATool *main, QGraphicsScene *scene, QWidget *parent) : QGraphicsView(scene, parent) {
 	mainWindow = main;

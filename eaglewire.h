@@ -6,16 +6,12 @@
 #ifndef TRACK_H
 #define TRACK_H
 
-#include <QGraphicsItem>
-#include <QPen>
-#include <QDebug>
-
 #include "pcbgraphicsitem.h"
 
-class Wire : public PCBGraphicsItem {
+class EagleWire : public PCBGraphicsItem {
 public:
-	Wire(QPointF p1, QPointF p2, qreal w);
-	Wire(qreal x1, qreal y1, qreal x2, qreal y2, qreal w);
+	EagleWire(QPointF p1, QPointF p2, qreal w, int _layer);
+	EagleWire(qreal x1, qreal y1, qreal x2, qreal y2, qreal w, int _layer);
 	QRectF boundingRect() const;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 

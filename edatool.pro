@@ -12,12 +12,20 @@ LIBS +=
 
 # Input
 SOURCES += main.cpp edatool.cpp board.cpp layer.cpp boardview.cpp tool.cpp routetool.cpp selecttool.cpp \
-    wire.cpp \
     eagleformat.cpp \
-    smd.cpp \
-    pcbgraphicsitem.cpp
+    pcbgraphicsitem.cpp \
+    eaglerectangle.cpp \
+    eaglepad.cpp \
+    eaglewire.cpp \
+    eaglesmd.cpp \
+    eaglepolygon.cpp \
+    clipper.cpp
 HEADERS += edatool.h board.h layer.h boardview.h tool.h routetool.h selecttool.h \
-    wire.h \
     eagleformat.h \
-    smd.h \
-    pcbgraphicsitem.h
+    pcbgraphicsitem.h \
+    eaglerectangle.h \
+    eaglepad.h \
+    eaglewire.h \
+    eaglesmd.h \
+    eaglepolygon.h \
+    clipper.h

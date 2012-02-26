@@ -6,7 +6,7 @@
 #ifndef ROUTETOOL_H
 #define ROUTETOOL_H
 #include "tool.h"
-#include "wire.h"
+#include "eaglewire.h"
 class QMainWindow;
 class QMouseEvent;
 class QKeyEvent;
@@ -27,8 +27,8 @@ private:
 	bool routing;
 	void updateWayPoint();
 	QPointF start, stop, wayPoint;
-	Wire *tempSegment1;
-	Wire *tempSegment2;
+	EagleWire *tempSegment1;
+	EagleWire *tempSegment2;
 	bool exitortho;
 };
 

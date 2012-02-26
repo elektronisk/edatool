@@ -84,8 +84,8 @@ bool RouteTool::eventFilter(QObject *obj, QEvent *rawEvent) {
 				tempSegment2->snapIgnore = false;
 			}
 
-			tempSegment1 = new Wire(start, getBoardView()->sceneCursorPosition, 0.200);
-			tempSegment2 = new Wire(start, getBoardView()->sceneCursorPosition, 0.200);
+			tempSegment1 = new EagleWire(start, getBoardView()->sceneCursorPosition, 0.200, 1);
+			tempSegment2 = new EagleWire(start, getBoardView()->sceneCursorPosition, 0.200, 1);
 			tempSegment1->snapIgnore = true;
 			tempSegment2->snapIgnore = true;
 			getBoardScene()->addItem(tempSegment1);

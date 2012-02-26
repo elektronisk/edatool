@@ -9,10 +9,7 @@ public:
 	PCBGraphicsItem(QGraphicsItem *parent = 0);
 	QList<QPointF> snapPoints;
 	bool snapIgnore;
-signals:
-	
-public slots:
-	
+	int layer;
 };
 
 #endif // PCBGRAPHICSITEM_H

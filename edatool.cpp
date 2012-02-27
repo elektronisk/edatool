@@ -63,61 +63,35 @@ EDATool::EDATool() {
 
 }
 
-QColor EDATool::layerToColor(int layer) {
-	typedef struct LayerDefinition_t {
+void EDATool::layerToPenBrush(int layer, QPen &pen, QBrush &brush) {
+	struct LayerDefinition {
+		LayerDefinition(QString s, QColor c, Qt::BrushStyle bs){
+			this->name = s;
+			this->color = c;
+			this->brushStyle = bs;
+		}
+
 		QString name;
-		QRgb color;
+		QColor color;
 		enum Qt::BrushStyle brushStyle;
-	} LayerDefinition;
-	LayerDefinition ld[52];
-	ld[1].name = "Top";
-	ld[1].color = qRgba(255,0,0,127);
-	ld[1].brushStyle = Qt::SolidPattern;
-	ld[16].name = "Bottom";
-	ld[16].color = qRgba(0,0,255,127);
-	ld[16].brushStyle = Qt::SolidPattern;
-	ld[21].name = "tPlace";
-	ld[21].color = qRgba(255,255,255,127);
-	ld[21].brushStyle = Qt::SolidPattern;
-	ld[29].name = "tStop";
-	ld[29].color = qRgba(0,255,0,127);
-	ld[29].brushStyle = Qt::SolidPattern;
-	ld[31].name = "tCream";
-	ld[31].color = qRgba(255,255,255,255);
-	ld[31].brushStyle = Qt::BDiagPattern;
-	ld[51].name = "tDocu";
-	ld[51].color = qRgba(200,200,200,127);
-	ld[51].brushStyle = Qt::SolidPattern;
+		int zorder;
+	};
+	LayerDefinition *ld[52];
 
-	QColor c(ld[layer].color);
-	return c;
-}
+	ld[0] = new LayerDefinition("Undefined", QColor(0,0,0,255), Qt::CrossPattern);
+	ld[1] = new LayerDefinition("Top", QColor(255,0,0,127), Qt::SolidPattern);
+	ld[16] = new LayerDefinition("Bottom", QColor(0,0,255,127), Qt::SolidPattern);
+	ld[21] = new LayerDefinition("tPlace", QColor(255,255,255,127), Qt::SolidPattern);
+	ld[29] = new LayerDefinition("tStop", QColor(0,255,0,127), Qt::BDiagPattern);
+	ld[31] = new LayerDefinition("tCream", QColor(255,255,255,127), Qt::BDiagPattern);
+	ld[51] = new LayerDefinition("tDocu", QColor(200,200,200,127), Qt::SolidPattern);
+	if (!ld[layer]) {
+		layer = 0; // default style
+	}
+	brush.setColor(ld[layer]->color);
+	brush.setStyle(ld[layer]->brushStyle);
+	brush.setTransform(QTransform::fromScale(0.005, 0.005));
 
-Qt::BrushStyle EDATool::layerToBrushStyle(int layer) {
-	typedef struct LayerDefinition_t {
-		QString name;
-		QRgb color;
-		enum Qt::BrushStyle brushStyle;
-	} LayerDefinition;
-	LayerDefinition ld[52];
-	ld[1].name = "Top";
-	ld[1].color = qRgb(255,0,0);
-	ld[1].brushStyle = Qt::SolidPattern;
-	ld[16].name = "Bottom";
-	ld[16].color = qRgb(0,0,255);
-	ld[16].brushStyle = Qt::SolidPattern;
-	ld[21].name = "tPlace";
-	ld[21].color = qRgb(255,255,255);
-	ld[21].brushStyle = Qt::SolidPattern;
-	ld[29].name = "tStop";
-	ld[29].color = qRgb(0,255,0);
-	ld[29].brushStyle = Qt::BDiagPattern;
-	ld[31].name = "tCream";
-	ld[31].color = qRgb(255,255,255);
-	ld[31].brushStyle = Qt::BDiagPattern;
-	ld[51].name = "tDocu";
-	ld[51].color = qRgb(200,200,200);
-	ld[51].brushStyle = Qt::SolidPattern;
-
-	return ld[layer].brushStyle;
+	pen.setColor(ld[layer]->color);
+	pen.setStyle(Qt::SolidLine);
 }

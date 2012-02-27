@@ -47,8 +47,12 @@ QRectF EagleWire::boundingRect() const {
 
 void EagleWire::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWidget *widget){
 	//p->drawRect(boundingRect());
-
-	p->setPen(QPen(EDATool::layerToColor(layer), width, Qt::SolidLine, Qt::RoundCap));
+	QBrush brush; QPen pen;
+	EDATool::layerToPenBrush(layer, pen, brush);
+	p->setBrush(brush);
+	pen.setCapStyle(Qt::RoundCap);
+	pen.setWidthF(width);
+	p->setPen(pen);
 	p->drawLine(p1, p2);
 
 }

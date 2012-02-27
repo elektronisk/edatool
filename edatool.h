@@ -20,8 +20,9 @@ public:
 	EDATool();
 	friend class Tool;
 	friend class BoardView;
-	static QColor layerToColor(int layer);
-	static Qt::BrushStyle layerToBrushStyle(int layer);
+	//static QColor layerToColor(int layer);
+	//static Qt::BrushStyle layerToBrushStyle(int layer);
+	static void layerToPenBrush(int layer, QPen &pen, QBrush &brush);
 private slots:
 private:
 	QActionGroup *toolActionGroup;

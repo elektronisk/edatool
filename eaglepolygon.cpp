@@ -29,13 +29,14 @@ EaglePolygon::EaglePolygon(QPolygonF _vertices, qreal _width, int _layer, qreal 
 QRectF EaglePolygon::boundingRect() const {
 	const qreal halfwidth = width/2;
 	return vertices.boundingRect().adjusted(-halfwidth, -halfwidth, halfwidth, halfwidth);
+	// TODO: cache bounding rectangle
 }
 void EaglePolygon::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWidget *w) {
-	QBrush b(EDATool::layerToColor(layer), EDATool::layerToBrushStyle(layer));
+	QBrush brush; QPen pen;
+	EDATool::layerToPenBrush(layer, pen, brush);
+	p->setBrush(brush);
+	p->setPen(pen);
 
-	b.setTransform(QTransform::fromScale(0.005, 0.005));
-	p->setBrush(b);
-	p->setPen(QPen(EDATool::layerToColor(layer)));
 	p->drawPolygon(vertices);
 
 }

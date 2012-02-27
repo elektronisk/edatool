@@ -15,9 +15,9 @@ void EagleRectangle::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWi
 	if (rot == "R90" || rot == "R270") {
 		p->rotate(90);
 	}
-	QBrush b(EDATool::layerToColor(layer), EDATool::layerToBrushStyle(layer));
-	b.setTransform(QTransform::fromScale(0.005, 0.005));
-	p->setBrush(b);
-	p->setPen(QPen(EDATool::layerToColor(layer)));
+	QBrush brush; QPen pen;
+	EDATool::layerToPenBrush(layer, pen, brush);
+	p->setBrush(brush);
+	p->setPen(pen);
 	p->drawRect(QRectF(QPointF(x1,y1), QPointF(x2,y2)));
 }

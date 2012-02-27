@@ -22,8 +22,10 @@ void EagleSmd::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWidget *
 	if (rot == "R90" || rot == "R270") {
 		p->rotate(90);
 	}
-	QBrush b(EDATool::layerToColor(layer), Qt::SolidPattern);
-	p->setBrush(b);
-	p->setPen(QPen(EDATool::layerToColor(layer)));
+	QBrush brush; QPen pen;
+	EDATool::layerToPenBrush(layer, pen, brush);
+	p->setBrush(brush);
+	p->setPen(pen);
+
 	p->drawRect(QRectF(QPointF(-xhalf, -yhalf), QPointF(+xhalf, +yhalf)));
 }

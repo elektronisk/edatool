@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QtCore/qmath.h>
 #include "eaglepad.h"
+#include "edatool.h"
 #include <cmath>
 EaglePad::EaglePad(qreal _x, qreal _y, qreal _drill, qreal _diameter, PadShape _shape, bool stop, bool thermals, bool first) {
 	x = _x; y = _y; drill = _drill; diameter = _diameter; shape = _shape;
@@ -37,7 +38,12 @@ QRectF EaglePad::boundingRect() const {
 
 void EaglePad::paint(QPainter *p, const QStyleOptionGraphicsItem *opt, QWidget *w) {
 	const qreal r = diameter/2;
-	p->setPen(QPen(QColor(Qt::green)));
+
+	QBrush brush; QPen pen;
+	EDATool::layerToPenBrush(layer, pen, brush);
+	p->setBrush(brush);
+	p->setPen(pen);
+
 	switch(shape) {
 	case EaglePad::Square:
 		p->drawRect(QRectF(QPointF(x-r, y-r), QPointF(x+r, y+r)));

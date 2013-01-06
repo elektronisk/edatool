@@ -13,7 +13,7 @@
 
 class EditorArea;
 class QGraphicsScene;
-
+class QTreeWidgetItem;
 class EDATool : public QMainWindow {
 	Q_OBJECT
 public:
@@ -23,7 +23,9 @@ public:
 	//static QColor layerToColor(int layer);
 	//static Qt::BrushStyle layerToBrushStyle(int layer);
 	static void layerToPenBrush(int layer, QPen &pen, QBrush &brush);
-private slots:
+	QHash<QString, QGraphicsItemGroup*> *cache;
+public slots:
+	void itemClicked(QTreeWidgetItem* ,QTreeWidgetItem * previous);
 private:
 	QActionGroup *toolActionGroup;
 	QToolBar *toolBar;

@@ -1826,8 +1826,8 @@ void Clipper::IntersectEdges(TEdge *e1, TEdge *e2,
             AddLocalMinPoly(e1, e2, pt);
           break;
         case ctDifference:
-          if (e1->polyType == ptClip && e1Wc2 > 0 && e2Wc2 > 0 || 
-              e1->polyType == ptSubject && e1Wc2 <= 0 && e2Wc2 <= 0)
+		  if ((e1->polyType == ptClip && e1Wc2 > 0 && e2Wc2 > 0) ||
+			  (e1->polyType == ptSubject && e1Wc2 <= 0 && e2Wc2 <= 0))
                 AddLocalMinPoly(e1, e2, pt);
           break;
         case ctXor:

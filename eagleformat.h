@@ -14,7 +14,7 @@ class EaglePolygon;
 class EagleFormat {
 public:
 	EagleFormat();
-	bool read(QIODevice*, QGraphicsScene *scene);
+	bool read(QIODevice*, QHash<QString, QGraphicsItemGroup *> *cache);
 private:
 	QDomDocument domDocument;
 	EagleRectangle *CreateRectangle(QDomElement *e);

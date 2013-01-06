@@ -1,5 +1,5 @@
 #include <QGraphicsScene>
-
+#include <QHash>
 #include "eagleformat.h"
 #include "board.h"
 #include "eaglewire.h"
@@ -12,11 +12,11 @@ EagleFormat::EagleFormat()
 {
 }
 
-bool EagleFormat::read(QIODevice *device, QGraphicsScene *scene) {
+bool EagleFormat::read(QIODevice *device, QHash<QString, QGraphicsItemGroup*> *cache) {
 	QString errorStr;
 	int errorLine;
 	int errorColumn;
-
+	cache->clear();
 	if (!domDocument.setContent(device, true, &errorStr, &errorLine, &errorColumn)) {
 		qDebug() << QString("parse error: %1 %2 %3").arg(errorStr).arg(errorLine).arg(errorColumn);
 		return false;
@@ -42,45 +42,28 @@ bool EagleFormat::read(QIODevice *device, QGraphicsScene *scene) {
 		QDomElement package = packages.firstChildElement("package");
 		for (; !package.isNull(); package = package.nextSiblingElement("package")) {
 			qDebug() << " " << package.attribute("name");
-			if (package.attribute("name") == "QFN32") {
-
-				QDomElement child = package.firstChildElement("wire");
-				while (!child.isNull()) {
-					float x, y, dx, dy, x1, x2, y1, y2, w, size, drill, diameter;
-					int layer;
-					layer = child.attribute("layer", "1").toFloat();
-					x1 = child.attribute("x1", "0").toFloat();
-					x2 = child.attribute("x2", "0").toFloat();
-					y1 = child.attribute("y1", "0").toFloat();
-					y2 = child.attribute("y2", "0").toFloat();
-					x = child.attribute("x", "0").toFloat();
-					y = child.attribute("y", "0").toFloat();
-					dx = child.attribute("dx", "0.1").toFloat();
-					dy = child.attribute("dy", "0.1").toFloat();
-					w = child.attribute("width", "0.1").toFloat();
-					drill = child.attribute("drill", "0").toFloat();
-					diameter = child.attribute("diameter", "-1").toFloat();
-					size = child.attribute("width", "1").toFloat();
-
-					if (child.tagName() == "wire") {
-						scene->addItem(CreateWire(&child));
-					} else if (child.tagName() == "rectangle") {
-						scene->addItem(CreateRectangle(&child));
-					} else if (child.tagName() == "smd") {
-						scene->addItem(CreateSmd(&child));
-					} else if (child.tagName() == "pad") {
-						scene->addItem(CreatePad(&child));
-					} else if (child.tagName() == "polygon") {
-						scene->addItem(CreatePolygon(&child));
-					} else if (child.tagName() == "text") {
-						//QGraphicsTextItem *text = scene->addText(child.text());
-						//text->setFont(QFont("ISOCPEUR", 1));
-						//text->setPos(x, y);
-					}
-
-					child = child.nextSiblingElement();
+			QGraphicsItemGroup *group = new QGraphicsItemGroup();
+			QDomElement child = package.firstChildElement();
+			while (!child.isNull()) {
+				if (child.tagName() == "wire") {
+					group->addToGroup(CreateWire(&child));
+				} else if (child.tagName() == "rectangle") {
+					group->addToGroup(CreateRectangle(&child));
+				} else if (child.tagName() == "smd") {
+					group->addToGroup(CreateSmd(&child));
+				} else if (child.tagName() == "pad") {
+					group->addToGroup(CreatePad(&child));
+				} else if (child.tagName() == "polygon") {
+					group->addToGroup(CreatePolygon(&child));
+				} else if (child.tagName() == "text") {
+					//QGraphicsTextItem *text = scene->addText(child.text());
+					//text->setFont(QFont("ISOCPEUR", 1));
+					//text->setPos(x, y);
 				}
+
+				child = child.nextSiblingElement();
 			}
+			cache->insert(package.attribute("name"), group);
 		}
 	}
 

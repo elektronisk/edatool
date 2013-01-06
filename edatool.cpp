@@ -11,6 +11,9 @@
 #include "routetool.h"
 #include "selecttool.h"
 
+
+
+
 EDATool::EDATool() {
 	this->setWindowTitle(tr("EDATool"));
 
@@ -26,12 +29,11 @@ EDATool::EDATool() {
 	tabs->setDocumentMode(true);
 	this->setCentralWidget(tabs);
 	QDockWidget *temp = new QDockWidget(this);
-	QPushButton *button = new QPushButton(temp);
-
+	QTreeWidget *tree = new QTreeWidget(this);
 	temp->setWindowTitle("Tool settings");
-	temp->setWidget(button);
-
-	button->setText("Lols");
+	temp->setWidget(tree);
+	tree->setColumnCount(1);
+	tree->setHeaderLabel("Name");
 	this->addDockWidget(Qt::LeftDockWidgetArea, temp);
 	
 	this->fileMenu = this->menuBar()->addMenu(tr("File"));
@@ -56,11 +58,21 @@ EDATool::EDATool() {
 	selTool->install();
 	RouteTool *tool = new RouteTool(this);
 	tool->install();
-
+	cache = new QHash<QString, QGraphicsItemGroup*>();
 	QFile file("C:\\Users\\andreas\\workspace\\edatool\\test.brd");
 	EagleFormat *eagleFormat = new EagleFormat();
-	eagleFormat->read(&file, boardScene);
+	eagleFormat->read(&file,cache);
+	QHashIterator<QString, QGraphicsItemGroup*> i(*cache);
+	while (i.hasNext()) {
+		i.next();
+		QTreeWidgetItem *item = new QTreeWidgetItem(tree, QStringList(i.key()));
+	}
+	connect(tree,SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),this,SLOT(itemClicked(QTreeWidgetItem*,QTreeWidgetItem*)));
+}
 
+void EDATool::itemClicked(QTreeWidgetItem* item,QTreeWidgetItem* previous) {
+	boardScene->clear();
+	boardScene->addItem(cache->value(item->text(0)));
 }
 
 void EDATool::layerToPenBrush(int layer, QPen &pen, QBrush &brush) {
